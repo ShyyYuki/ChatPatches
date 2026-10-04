@@ -529,7 +529,7 @@ public abstract class ChatScreenMixin extends Screen implements ChatScreenAccess
 		} else if(contextMenu.mouseClicked(/*$ mouse_args {*/ mouse, bl/*$}*/)) {
 			contextMenu.close(this::removeWidget);
 			cir.setReturnValue(true);
-		} else if(button == InputConstants.MOUSE_BUTTON_LEFT && mouse.hasControlDown() && !searchResults.isEmpty()) {
+		} else if(button == InputConstants.MOUSE_BUTTON_LEFT && /*? if >=1.21.9 {*/mouse.hasControlDown()/*?} else {*//*hasControlDown()*//*?}*/ && !searchResults.isEmpty()) {
 			GuiMessage clicked = findSearchResultAt(mX, mY);
 			if(clicked != null) {
 				jumpToMessage(clicked);
