@@ -4,12 +4,10 @@ import kotlinx.serialization.json.jsonObject
 import me.modmuss50.mpp.ReleaseType
 import me.modmuss50.mpp.platforms.curseforge.CurseforgeVersionRangeOptions
 import me.modmuss50.mpp.platforms.modrinth.ModrinthVersionRangeOptions
-import org.gradle.crypto.checksum.Checksum
 
 plugins { // versions in gradle.properties + settings.gradle.kts
     kotlin("jvm")
     alias(ft.plugins.mixin)
-    id("org.gradle.crypto.checksum") //todo temp comment out this stuff..?
     signing
     id("dev.isxander.mtk.manifests")
     id("me.modmuss50.mod-publish-plugin")
@@ -234,17 +232,6 @@ signing {
     sign(modstitch.finalJarTask.get()) // creates `signJar` on 26.1+ else `signRemapJar`
 }
 
-val checksumTask = tasks.register<Checksum>("generateChecksum") {
-    description = "Generates a SHA256 hash for the registered final jar task."
-    group = "signing"
-
-    dependsOn(signFinalJarTask) // requires the signed jars to exist (which in turn requires `build`)
-
-    inputFiles.from(modstitch.finalJarTask)
-    outputDirectory = layout.buildDirectory.dir("libs")
-    appendFileNameToChecksum = true
-}
-
 tasks {
     modstitch.finalJarTask {
         archiveBaseName.set(id)
@@ -290,7 +277,7 @@ tasks {
     //prepub: do we need to declare a dependency for signFinalJarTask?
     // it doesn't seem like it... but idk if gradle will crash out later
     /*publishMods {
-        dependencies.get().dependsOn(tasks[signFinalJarTask], checksumTask)
+        dependencies.get().dependsOn(tasks[signFinalJarTask])
     }*/
 }
 
@@ -487,10 +474,11 @@ publishMods {
             }
         }
 
-        // turns out i can't even upload checksums to modrinth,😭 bc they're... already provided? but not shown to anyone (unless explicitly API requested)? sigh.
+        // can't even upload checksums to modrinth bc they're... already provided?
+        // but not shown to anyone (unless explicitly API requested)? sigh.
 
-        // prepub: signatures *should* now be supported both via Modrinth's v3 API and thru MPP 2.2.0!
-        additionalFiles.from(tasks[signFinalJarTask], /*checksumTask*/)
+        // signatures *should* now be supported both via Modrinth's v3 API and thru MPP 2.2.0!
+        additionalFiles.from(tasks[signFinalJarTask])
 
         // specify id OR slug NOT both, +OPTIONAL specific version
         required.forEach(::requires)
