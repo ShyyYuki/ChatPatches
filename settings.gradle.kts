@@ -6,7 +6,6 @@ pluginManagement {
 
     plugins {
         kotlin("jvm") version plugin("kotlin")
-        id("org.gradle.crypto.checksum") version "1.4.0" // hasn't updated in 4+ years
         id("dev.isxander.mtk.manifests") version mtk("manifests")
         id("me.modmuss50.mod-publish-plugin") version plugin("mod-publish-plugin")
         id("dev.isxander.modstitch.base") version plugin("modstitch")
