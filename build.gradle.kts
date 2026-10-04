@@ -474,10 +474,11 @@ publishMods {
             }
         }
 
-        // turns out i can't even upload checksums to modrinth,😭 bc they're... already provided? but not shown to anyone (unless explicitly API requested)? sigh.
+        // can't even upload checksums to modrinth bc they're... already provided?
+        // but not shown to anyone (unless explicitly API requested)? sigh.
 
-        // prepub: signatures *should* now be supported both via Modrinth's v3 API and thru MPP 2.2.0!
-        additionalFiles.from(tasks[signFinalJarTask], /*checksumTask*/)
+        // signatures *should* now be supported both via Modrinth's v3 API and thru MPP 2.2.0!
+        additionalFiles.from(tasks[signFinalJarTask])
 
         // specify id OR slug NOT both, +OPTIONAL specific version
         required.forEach(::requires)
